@@ -16,24 +16,20 @@ class BudgetManager:
         total_expenses = sum(item['amount'] for item in self.expenses)
         return total_incomes - total_expenses
 
-    def show_summary(self):
-        print("\n=== Budget Summary ===")
-        print(f"Total incomes: {sum(item['amount'] for item in self.incomes)} zł")
-        print(f"Total expenses: {sum(item['amount'] for item in self.expenses)} zł")
-        print(f"Balance: {self.calculate_balance()} zł")
+    # Funkcja do wyświetlania podsumowania w GUI
+    def show_summary(self, label):
+        total_incomes = sum(item['amount'] for item in self.incomes)
+        total_expenses = sum(item['amount'] for item in self.expenses)
+        balance = self.calculate_balance()
 
-    def show_details(self):
-        print("\n=== Incomes Details ===")
-        for income in self.incomes:
-            print(f"Income: {income['amount']} zł, Description: {income['description']}")
-
-        print("\n=== Expenses Details ===")
-        for expense in self.expenses:
-            print(f"Expense: {expense['amount']} zł, Description: {expense['description']}")
+        # Zaktualizuj tekst przekazanej etykiety (label)
+        label.config(text=f"Total incomes: {total_incomes} zł\n"
+                          f"Total expenses: {total_expenses} zł\n"
+                          f"Balance: {balance} zł")
 
     def plot_expenses_pie_chart(self):
-        labels=[expense['description'] for expense in self.expenses]
-        amounts=[expense['amount'] for expense in self.expenses]
+        labels = [expense['description'] for expense in self.expenses]
+        amounts = [expense['amount'] for expense in self.expenses]
 
         if amounts:
             plt.figure(figsize=(6, 6))
@@ -42,17 +38,17 @@ class BudgetManager:
             plt.axis('equal')
             plt.show()
         else:
-            print('Error')
+            print('Error: No expenses to plot')
 
     def plot_income_pie_chart(self):
-        labels=[income['description'] for income in self.incomes]
-        amounts=[income['amount'] for income in self.incomes]
+        labels = [income['description'] for income in self.incomes]
+        amounts = [income['amount'] for income in self.incomes]
 
         if amounts:
             plt.figure(figsize=(6, 6))
             plt.pie(amounts, labels=labels, autopct='%1.1f%%', startangle=90)
-            plt.title("Distribution of expenses")
+            plt.title("Distribution of incomes")
             plt.axis('equal')
             plt.show()
         else:
-            print('Error')
+            print('Error: No incomes to plot')
